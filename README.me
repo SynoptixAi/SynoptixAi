@@ -1,6 +1,6 @@
-# Synoptix Agent Kit
+# LinYi Agent Kit
 
-This library provides you with an easy way to create and run Synoptix Agents.
+This library provides you with an easy way to create and run LinYi Agents.
 
 
 ## Project Requirements
@@ -12,12 +12,12 @@ This library provides you with an easy way to create and run Synoptix Agents.
 You can either directly install from pip:
 
 ```sh
-pip install git+https://github.com/SynoptixAi/SynoptixAi
+pip install git+https://github.com/LinYiAi/LinYiAi
 ```
 
 Or add it to your _requirements.txt_ file:
 
-```Synoptix-agent @ git+https://github.com/SynoptixAi/SynoptixAi
+```LinYi-agent @ git+https://github.com/LinYiAi/LinYiAi
 ```
 
 ### Optional Dependencies
@@ -25,13 +25,13 @@ Or add it to your _requirements.txt_ file:
 To install with the optional web3 dependencies, you can specify them as follows:
 
 ```sh
-pip install git+https://github.com/SynoptixAi/SynoptixAi
+pip install git+https://github.com/LinYiAi/LinYiAi
 ```
 
 Or add it to your _requirements.txt_ file:
 
 ```sh
-Synoptix-agent[web3] @ git+https://github.com/SynoptixAi/SynoptixAi
+LinYi-agent[web3] @ git+https://github.com/LinYiAi/LinYiAi
 ```
 
 ## Environment Setup
@@ -42,52 +42,52 @@ Make a copy of the [.env.example](.env.example) file and rename it to _.env_.
 
 ## Configuration Setup
 
-To use a configuration file with your `SynoptixAgent`, follow these steps:
+To use a configuration file with your `LinYiAgent`, follow these steps:
 
 1. **Create a Configuration File**:
 
-   - Create a TOML file (e.g., `Synoptix_config.toml`) in your project directory. (See [Synoptix_config_example.toml](./Synoptix_config_example.toml)).
+   - Create a TOML file (e.g., `LinYi_config.toml`) in your project directory. (See [LinYi_config_example.toml](./LinYi_config_example.toml)).
 
 2. **Create an SDK Context**:
 
    - Create an instance of SDKContext with the path to your configuration file.
-   - The SDKContext allows you to manage configurations, resources, and utilities across your Synoptix Agents more efficiently.
+   - The SDKContext allows you to manage configurations, resources, and utilities across your LinYi Agents more efficiently.
 
    ```python
-   from Synoptix_agent.sdk_context import SDKContext
+   from LinYi_agent.sdk_context import SDKContext
 
-   sdk_context = SDKContext(config_path="./Synoptix_config.toml")
+   sdk_context = SDKContext(config_path="./LinYi_config.toml")
    ```
 
 2. **Specify the Configuration Path**:
 
-   - When creating a `SynoptixAgent` instance, provide the relative or absolute path to your configuration file.
+   - When creating a `LinYiAgent` instance, provide the relative or absolute path to your configuration file.
    - Agent will use the configuration from the SDK Context. If you have one agent you can directly pass the config_path it will create the sdk_context for you.
 
 
    ```python
-   from Synoptix_agent import SynoptixAgent
+   from LinYi_agent import LinYiAgent
 
    import os
 
    def get_config_path(filename):
        return os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
 
-   simple_agent = SynoptixAgent(
+   simple_agent = LinYiAgent(
        name="Simple Agent",
        functions=[],
        instruction="your instructions for this agent's goal",
        sdk_context=sdk_context
-       #config_path=get_config_path("Synoptix_config.toml") # ./Synoptix_config.toml works too  
+       #config_path=get_config_path("LinYi_config.toml") # ./LinYi_config.toml works too  
    )
    ```
 
 ## Usage
 
-First import the `Synoptix Agent` class:
+First import the `LinYi Agent` class:
 
 ```python
-from Synoptix_agent import SynoptixAgent
+from LinYi_agent import LinYiAgent
 ```
 
 Load your environment variables:
@@ -97,10 +97,10 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-Then create a SynoptixAgent instance:
+Then create a LinYiAgent instance:
 
 ```python
-my_agent = SynoptixAgent(
+my_agent = LinYiAgent(
     name="my_agent",
     functions=[],
     instruction="your instructions for this agent's goal",
@@ -132,7 +132,7 @@ You can create tools that help your agent handle more complex tasks. Here's an e
 import os
 from typing import Optional, Dict
 from web3 import Web3
-from Synoptix_hive import SynoptixHiveAgent
+from LinYi_hive import LinYiHiveAgent
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -160,7 +160,7 @@ def get_transaction_receipt(transaction_hash: str) -> Optional[Dict]:
         return None
 
 if __name__ == "__main__":
-    my_agent = SynoptixHiveAgent(
+    my_agent = LinYiHiveAgent(
         name="my_agent",
         functions=[get_transaction_receipt]
     )
@@ -190,17 +190,17 @@ if __name__ == "__main__":
 You can create a swarm of agents to collaborate on complex tasks. Here's an example of how to set up and use a swarm:
 
 ````python
-from Synoptix_agent.swarm import SynoptixSwarm
-from Synoptix_agent.agent import SynoptixAgent
-from Synoptix_agent.sdk_context import SDKContext
+from LinYi_agent.swarm import LinYiSwarm
+from LinYi_agent.agent import LinYiAgent
+from LinYi_agent.sdk_context import SDKContext
 
-from Synoptix_agent.llms.utils import llm_from_config
-from Synoptix_agent.utils import tools_from_funcs
-from Synoptix_agent.llms.claude import ClaudeLLM
+from LinYi_agent.llms.utils import llm_from_config
+from LinYi_agent.utils import tools_from_funcs
+from LinYi_agent.llms.claude import ClaudeLLM
 import asyncio
 
 # Create SDK Context
-sdk_context = SDKContext(config_path="./Synoptix_config_example.toml")
+sdk_context = SDKContext(config_path="./LinYi_config_example.toml")
 
 def save_report():
     return "save_item_to_csv"
@@ -214,12 +214,12 @@ tools = tools_from_funcs([search_on_web])
 claude = ClaudeLLM(llm=llm, tools=tools)
     
 # Create individual agents
-agent1 = SynoptixAgent(name="Research Agent", instruction="Conduct research on given topics", sdk_context=sdk_context, functions=[search_on_web], llm=claude)
-agent2 = SynoptixAgent(name="Analysis Agent", instruction="Analyze data and provide insights", sdk_context=sdk_context, functions=[save_report])
-agent3 = SynoptixAgent(name="Report Agent", instruction="Compile findings into a report", sdk_context=sdk_context, functions=[])
+agent1 = LinYiAgent(name="Research Agent", instruction="Conduct research on given topics", sdk_context=sdk_context, functions=[search_on_web], llm=claude)
+agent2 = LinYiAgent(name="Analysis Agent", instruction="Analyze data and provide insights", sdk_context=sdk_context, functions=[save_report])
+agent3 = LinYiAgent(name="Report Agent", instruction="Compile findings into a report", sdk_context=sdk_context, functions=[])
 
 # Create swarm
-swarm = SynoptixSwarm(name="Research Team", description="A swarm of agents that collaborate on research tasks",
+swarm = LinYiSwarm(name="Research Team", description="A swarm of agents that collaborate on research tasks",
                  instruction="Be helpful and collaborative", functions=[], agents=[agent1, agent2, agent3], sdk_context=sdk_context)
 
 
@@ -235,20 +235,20 @@ if __name__ == "__main__":
 
 You can add retriever tools to create vector embeddings and retrieve semantic information. It will create vector index for every pdf documents under 'Zylo-agent-data/files/user' folder and can filter files with required_exts parameter.
 
-- Synoptix agent supports ".md", '.mdx' ,".txt", '.csv', '.docx', '.pdf' file types.
-- Synoptix agent supports 4 type of retriever (basic, chroma, pinecone-serverless, pinecone-pod) and controlled with retrieval_tool parameter.
+- LinYi agent supports ".md", '.mdx' ,".txt", '.csv', '.docx', '.pdf' file types.
+- LinYi agent supports 4 type of retriever (basic, chroma, pinecone-serverless, pinecone-pod) and controlled with retrieval_tool parameter.
 
 ````python
 import os
 from typing import Optional, Dict
 from web3 import Web3
-from Synoptix_agent import SynoptixAgent
+from LinYi_agent import LinYiAgent
 from dotenv import load_dotenv
 
 load_dotenv()
 
 if __name__ == "__main__":
-    my_agent = SynoptixAgent(
+    my_agent = LinYiAgent(
         name="retrieve-test",
         functions=[],
         retrieve = True,
@@ -280,7 +280,7 @@ Providing sample prompts allows them to explore what you have built.
 Here's how to add sample prompts which they can use before committing to use your agent/swarm.
 
 #### Default
-In your Synoptix_config.toml file, create a **top level** entry called `[sample_prompts]` and add a new array to the key `prompts` like this:
+In your LinYi_config.toml file, create a **top level** entry called `[sample_prompts]` and add a new array to the key `prompts` like this:
 ```toml
 [sample_prompts]
 prompts = [
@@ -305,7 +305,7 @@ sample_prompts = [
 ]
 ```
 
-See [./Synoptix_config_example.toml](./Synoptix_config_example.toml) for an example configuration file.
+See [./LinYi_config_example.toml](./LinYi_config_example.toml) for an example configuration file.
 
 
 ## Tutorial
@@ -386,4 +386,4 @@ Reports file `tests/htmlcov/index.html`
 
 ## Follow Us
 
-<https://x.com/SynoptixAi>
+<https://x.com/LinYiAi>
